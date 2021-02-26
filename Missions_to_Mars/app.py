@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect 
+from flask import Flask, render_template, redirect, jsonify
 import pymongo
 import scrape_mars
 
@@ -25,7 +25,9 @@ def home():
 # Route that will trigger the scrape function
 @app.route('/scrape')
 def scrape():
-    scrape_mars.mars_scrape()
+    mars_data = scrape_mars.mars_scrape()
+    collection.update({}, mars_data, upsert=True)
+    #return jsonify(mars_data)
     return redirect("/", code=302)
     
 
